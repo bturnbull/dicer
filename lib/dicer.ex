@@ -26,7 +26,7 @@ defmodule Dicer do
   def roll(expr) do
     case :dice_lexer.string(to_charlist(expr)) do
       {:ok, tokens, _} ->
-        {:ok, calc(tokens, %{roll: 0, dice: [], expr: ""})}
+        {:ok, calc(tokens)}
       {:error, _, _} ->
         {:error, :invalid_expr}
     end
@@ -90,6 +90,10 @@ defmodule Dicer do
 
   defp calc([], accumulator) do
     %{accumulator | expr: String.trim_leading(accumulator[:expr])}
+  end
+
+  defp calc(tokens) when is_list(tokens) do
+    calc(tokens, %{roll: 0, dice: [], expr: ""})
   end
 
   defp accumulate(%{op: op}, acc) do
