@@ -76,11 +76,15 @@ defmodule Dicer do
       {:dice, _, expr} ->
         calc(tail, accumulate(%{dice: Enum.sort(dice(expr))}, accumulator))
       {:dice_advantage, _, expr} ->
-        ## TODO
-        calc(tail, accumulator)
+        dice =
+          [Enum.sort(dice(expr)), Enum.sort(dice(expr))]
+          |> Enum.sort(&(Enum.sum(&1) >= Enum.sum(&2)))
+        calc(tail, accumulate(%{dice_adv: dice}, accumulator))
       {:dice_disadvantage, _, expr} ->
-        ## TODO
-        calc(tail, accumulator)
+        dice =
+          [Enum.sort(dice(expr)), Enum.sort(dice(expr))]
+          |> Enum.sort(&(Enum.sum(&1) <= Enum.sum(&2)))
+        calc(tail, accumulate(%{dice_adv: dice}, accumulator))
     end
   end
 
@@ -124,6 +128,24 @@ defmodule Dicer do
       roll: roll,
       dice: Enum.reverse([dice | Enum.reverse(acc[:dice])]),
       expr: Enum.join([acc[:expr], "(#{Enum.join(dice, " ")})"], " ")
+    }
+  end
+
+  defp accumulate(%{dice_adv: dice}, acc) do
+    selected = Enum.at(dice, 0)
+    rejected = Enum.at(dice, 1)
+
+    roll = case acc[:op] do
+      "-" ->
+        acc[:roll] - Enum.sum(selected)
+      _ ->
+        acc[:roll] + Enum.sum(selected)
+    end
+
+    %{
+      roll: roll,
+      dice: Enum.reverse([selected | Enum.reverse(acc[:dice])]),
+      expr: Enum.join([acc[:expr], "(#{Enum.join(selected, " ")} | #{Enum.join(rejected, " ")})"], " ")
     }
   end
 end
