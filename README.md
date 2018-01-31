@@ -1,6 +1,6 @@
 # Dicer
 
-Evaluate RPD dice notation and roll the result.
+Evaluate RPD dice notation and roll result.
 
 ## Examples
 
@@ -10,7 +10,7 @@ iex> Dicer.roll("3d6")
 iex> Dicer.roll("5d8 + 20")
 {:ok, %{roll: 42, dice: [[1, 4, 4, 5, 6], 20], expr: "(1 4 4 5 6) + 20"}}
 iex> Dicer.roll("3d6 + d8 - 2")
-{:ok, %{roll: 8, dice: [[1 3 5], [1], 2], expr: "(1 3 5) + (1) - 2"
+{:ok, %{roll: 8, dice: [[1 3 5], [1], 2], expr: "(1 3 5) + (1) - 2"}}
 ```
 
 ## To Use
