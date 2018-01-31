@@ -1,21 +1,24 @@
 # Dicer
 
-**TODO: Add description**
+Evaluate RPD dice notation and roll the result.
 
-## Installation
+## Examples
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `dicer` to your list of dependencies in `mix.exs`:
+```elixir
+iex> Dicer.roll("3d6")
+{:ok, %{roll: 14, dice: [[3, 5, 6]], expr: "(3 5 6)"}}
+iex> Dicer.roll("5d8 + 20")
+{:ok, %{roll: 42, dice: [[1, 4, 4, 5, 6], 20], expr: "(1 4 4 5 6) + 20"}}
+iex> Dicer.roll("3d6 + d8 - 2")
+{:ok, %{roll: 8, dice: [[1 3 5], [1], 2], expr: "(1 3 5) + (1) - 2"
+```
+
+## To Use
 
 ```elixir
 def deps do
   [
-    {:dicer, "~> 0.1.0"}
+    {:dicer, git: "https://github.com/bturnbull/dicer.git", tag: "0.1.0"}
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/dicer](https://hexdocs.pm/dicer).
-
