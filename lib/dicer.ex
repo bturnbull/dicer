@@ -27,6 +27,7 @@ defmodule Dicer do
     case :dice_lexer.string(to_charlist(expr)) do
       {:ok, tokens, _} ->
         {:ok, calc(tokens)}
+
       {:error, _, _} ->
         {:error, :invalid_expr}
     end
@@ -49,13 +50,14 @@ defmodule Dicer do
   """
   def dice(count, sides) do
     Enum.to_list(1..count)
-    |> Enum.map(fn _x -> (:rand.uniform(sides)) end)
+    |> Enum.map(fn _x -> :rand.uniform(sides) end)
   end
 
   def dice(expr) do
     [count, sides] =
       String.split(expr, "d", parts: 2)
-      |> Enum.map(&(String.to_integer(&1)))
+      |> Enum.map(&String.to_integer(&1))
+
     dice(count, sides)
   end
 
@@ -71,19 +73,25 @@ defmodule Dicer do
     case head do
       {:op, _, op} ->
         calc(tail, accumulate(%{op: op}, accumulator))
+
       {:int, _, int} ->
         calc(tail, accumulate(%{int: int}, accumulator))
+
       {:dice, _, expr} ->
         calc(tail, accumulate(%{dice: Enum.sort(dice(expr))}, accumulator))
+
       {:dice_advantage, _, expr} ->
         dice =
           [Enum.sort(dice(expr)), Enum.sort(dice(expr))]
           |> Enum.sort(&(Enum.sum(&1) >= Enum.sum(&2)))
+
         calc(tail, accumulate(%{dice_adv: dice}, accumulator))
+
       {:dice_disadvantage, _, expr} ->
         dice =
           [Enum.sort(dice(expr)), Enum.sort(dice(expr))]
           |> Enum.sort(&(Enum.sum(&1) <= Enum.sum(&2)))
+
         calc(tail, accumulate(%{dice_adv: dice}, accumulator))
     end
   end
@@ -99,19 +107,21 @@ defmodule Dicer do
   defp accumulate(%{op: op}, acc) do
     %{
       roll: acc[:roll],
-      op:   op,
+      op: op,
       dice: acc[:dice],
       expr: Enum.join([acc[:expr], op], " ")
     }
   end
 
   defp accumulate(%{int: int}, acc) do
-    roll = case acc[:op] do
-      "-" ->
-        acc[:roll] - int
-      _ ->
-        acc[:roll] + int
-    end
+    roll =
+      case acc[:op] do
+        "-" ->
+          acc[:roll] - int
+
+        _ ->
+          acc[:roll] + int
+      end
 
     %{
       roll: roll,
@@ -121,12 +131,14 @@ defmodule Dicer do
   end
 
   defp accumulate(%{dice: dice}, acc) do
-    roll = case acc[:op] do
-      "-" ->
-        acc[:roll] - Enum.sum(dice)
-      _ ->
-        acc[:roll] + Enum.sum(dice)
-    end
+    roll =
+      case acc[:op] do
+        "-" ->
+          acc[:roll] - Enum.sum(dice)
+
+        _ ->
+          acc[:roll] + Enum.sum(dice)
+      end
 
     %{
       roll: roll,
@@ -139,17 +151,23 @@ defmodule Dicer do
     selected = Enum.at(dice, 0)
     rejected = Enum.at(dice, 1)
 
-    roll = case acc[:op] do
-      "-" ->
-        acc[:roll] - Enum.sum(selected)
-      _ ->
-        acc[:roll] + Enum.sum(selected)
-    end
+    roll =
+      case acc[:op] do
+        "-" ->
+          acc[:roll] - Enum.sum(selected)
+
+        _ ->
+          acc[:roll] + Enum.sum(selected)
+      end
 
     %{
       roll: roll,
       dice: Enum.reverse([selected | Enum.reverse(acc[:dice])]),
-      expr: Enum.join([acc[:expr], "(#{Enum.join(selected, " ")} | #{Enum.join(rejected, " ")})"], " ")
+      expr:
+        Enum.join(
+          [acc[:expr], "(#{Enum.join(selected, " ")} | #{Enum.join(rejected, " ")})"],
+          " "
+        )
     }
   end
 end

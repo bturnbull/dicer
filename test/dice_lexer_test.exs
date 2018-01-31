@@ -50,51 +50,64 @@ defmodule DiceLexerTest do
   end
 
   test "d20 + 4" do
-    assert {:ok, [{:dice, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('d20 + 4')
+    assert {:ok, [{:dice, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('d20 + 4')
   end
 
   test "1d20 + 4" do
-    assert {:ok, [{:dice, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('1d20 + 4')
+    assert {:ok, [{:dice, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('1d20 + 4')
   end
 
   test "2d20 + 4" do
-    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('2d20 + 4')
+    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('2d20 + 4')
   end
 
   test "2d20+4" do
-    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('2d20+4')
+    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('2d20+4')
   end
 
   test "2d20+ 4" do
-    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('2d20+ 4')
+    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('2d20+ 4')
   end
 
   test "2d20 +4" do
-    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} = :dice_lexer.string('2d20 +4')
+    assert {:ok, [{:dice, 1, "2d20"}, {:op, 1, "+"}, {:int, 1, 4}], 1} =
+             :dice_lexer.string('2d20 +4')
   end
 
   test "2d6 - 1" do
-    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} = :dice_lexer.string('2d6 - 1')
+    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} =
+             :dice_lexer.string('2d6 - 1')
   end
 
   test "2d6- 1" do
-    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} = :dice_lexer.string('2d6- 1')
+    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} =
+             :dice_lexer.string('2d6- 1')
   end
 
   test "2d6 -1" do
-    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} = :dice_lexer.string('2d6 -1')
+    assert {:ok, [{:dice, 1, "2d6"}, {:op, 1, "-"}, {:int, 1, 1}], 1} =
+             :dice_lexer.string('2d6 -1')
   end
 
   test "d20a + 2" do
-    assert {:ok, [{:dice_advantage, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 2}], 1} = :dice_lexer.string('d20a + 2')
+    assert {:ok, [{:dice_advantage, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 2}], 1} =
+             :dice_lexer.string('d20a + 2')
   end
 
   test "d20d + 2" do
-    assert {:ok, [{:dice_disadvantage, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 2}], 1} = :dice_lexer.string('d20d + 2')
+    assert {:ok, [{:dice_disadvantage, 1, "1d20"}, {:op, 1, "+"}, {:int, 1, 2}], 1} =
+             :dice_lexer.string('d20d + 2')
   end
 
   test "5d8 + 2d4 + 16" do
-    assert {:ok, [{:dice, 1, "5d8"}, {:op, 1, "+"}, {:dice, 1, "2d4"}, {:op, 1, "+"}, {:int, 1, 16}], 1} = :dice_lexer.string('5d8 + 2d4 + 16')
+    assert {:ok,
+            [{:dice, 1, "5d8"}, {:op, 1, "+"}, {:dice, 1, "2d4"}, {:op, 1, "+"}, {:int, 1, 16}],
+            1} = :dice_lexer.string('5d8 + 2d4 + 16')
   end
 
   test "1d100" do

@@ -4,7 +4,6 @@ defmodule DicerTest do
   @iterations 10000
 
   describe "roll/1" do
-
     test "3d6" do
       rolls =
         Enum.to_list(1..@iterations)
@@ -43,7 +42,10 @@ defmodule DicerTest do
       assert Enum.all?(rolls, fn roll -> Enum.sum(Enum.at(elem(roll, 1).dice, 0)) >= 10 end)
       assert Enum.all?(rolls, fn roll -> Enum.sum(Enum.at(elem(roll, 1).dice, 0)) <= 40 end)
       assert Enum.all?(rolls, fn roll -> Enum.at(elem(roll, 1).dice, 1) == 5 end)
-      assert Enum.all?(rolls, fn roll -> Regex.match?(~r/^\((\d ){9}\d\) - 5$/, elem(roll, 1).expr) end)
+
+      assert Enum.all?(rolls, fn roll ->
+               Regex.match?(~r/^\((\d ){9}\d\) - 5$/, elem(roll, 1).expr)
+             end)
     end
 
     test "d8 + 3d6" do
@@ -58,7 +60,10 @@ defmodule DicerTest do
       assert Enum.all?(rolls, fn roll -> Enum.sum(Enum.at(elem(roll, 1).dice, 0)) <= 8 end)
       assert Enum.all?(rolls, fn roll -> Enum.sum(Enum.at(elem(roll, 1).dice, 1)) >= 3 end)
       assert Enum.all?(rolls, fn roll -> Enum.sum(Enum.at(elem(roll, 1).dice, 1)) <= 18 end)
-      assert Enum.all?(rolls, fn roll -> Regex.match?(~r/^\(\d\) \+ \(\d \d \d\)$/, elem(roll, 1).expr) end)
+
+      assert Enum.all?(rolls, fn roll ->
+               Regex.match?(~r/^\(\d\) \+ \(\d \d \d\)$/, elem(roll, 1).expr)
+             end)
     end
 
     test "trash" do
@@ -67,7 +72,6 @@ defmodule DicerTest do
   end
 
   describe "dice/2" do
-
     test "5d20" do
       rolls =
         Enum.to_list(1..@iterations)
@@ -97,7 +101,6 @@ defmodule DicerTest do
   end
 
   describe "dice/1" do
-
     test "5d20" do
       rolls =
         Enum.to_list(1..@iterations)
