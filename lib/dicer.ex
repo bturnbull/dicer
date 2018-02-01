@@ -24,12 +24,15 @@ defmodule Dicer do
 
   """
   def roll(expr) do
-    case :dice_lexer.string(to_charlist(expr)) do
+    case lex(expr) do
       {:ok, tokens, _} ->
         {:ok, calc(tokens)}
 
       {:error, _, _} ->
         {:error, :invalid_expr}
+
+      {:error, :timeout} ->
+        {:error, :timeout}
     end
   end
 
@@ -169,5 +172,18 @@ defmodule Dicer do
           " "
         )
     }
+  end
+
+  # Protect from the lexer stalling with a task+timeout
+  defp lex(expr) do
+    task = Task.async(fn -> :dice_lexer.string(to_charlist(expr)) end)
+
+    case Task.yield(task, 500) || Task.shutdown(task) do
+      {:ok, result} ->
+        result
+
+      nil ->
+        {:error, :timeout}
+    end
   end
 end
